@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Stat Sheet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #stat-sheet {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], input[type="number"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="stat-sheet">
+        <h1>Player Stat Sheet</h1>
+
+        <section id="player-info">
+            <h2>Player Info</h2>
+            <label>Name: <input type="text" id="player-name" value=""></label><br>
+            <label>Class: <input type="text" id="player-class" value=""></label><br>
+            <label>Level: <input type="number" id="player-level" value="1" onchange="updateStats()"></label>
+        </section>
+
+        <section id="attributes">
+            <h2>Attributes</h2>
+            <label>Health: <input type="number" id="attr-health" value="10" onchange="updateStats()"></label><br>
+            <label>Strength: <input type="number" id="attr-strength" value="10" onchange="updateStats()"></label><br>
+            <label>Speed: <input type="number" id="attr-speed" value="10" onchange="updateStats()"></label><br>
+            <label>Intelligence: <input type="number" id="attr-intelligence" value="10" onchange="updateStats()"></label>
+        </section>
+
+        <section id="main-stats">
+            <h2>Main Stats</h2>
+            <p>HP: <span id="stat-hp">0</span></p>
+            <p>MP: <span id="stat-mp">0</span></p>
+        </section>
+
+        <section id="sub-stats">
+            <h2>Sub Stats</h2>
+            <label>Crit Damage: <input type="number" id="sub-crit-damage" value="1.5" onchange="updateStats()"></label><br>
+            <label>Crit Rate: <input type="number" id="sub-crit-rate" value="0" onchange="updateStats()"></label><br>
+            <label>Damage Reduction: <input type="number" id="sub-damage-reduction" value="0" onchange="updateStats()"></label><br>
+            <label>Heal Received: <input type="number" id="sub-heal-received" value="0" onchange="updateStats()"></label>
+        </section>
+
+        <section id="equipment">
+            <h2>Equipment</h2>
+            <label>Weapon: <input type="text" id="equip-weapon" value=""></label><br>
+            <label>Armor: <input type="text" id="equip-armor" value=""></label><br>
+            <label>Accessories: <input type="text" id="equip-accessories" value=""></label>
+        </section>
+
+        <section id="skills">
+            <h2>Skills</h2>
+            <label>Skill Name: <input type="text" id="skill-name" value=""></label><br>
+            <label>Skill Level: <input type="number" id="skill-level" value="1"></label><br>
+            <label>Skill Description: <textarea id="skill-description"></textarea>
+        </section>
+
+        <section id="inventory">
+            <h2>Inventory</h2>
+            <label>Item Name: <input type="text" id="item-name" value=""></label><br>
+            <label>Quantity: <input type="number" id="item-quantity" value="1"></label><br>
+            <label>Description: <textarea id="item-description"></textarea>
+        </section>
+
+        <section id="daily-quests">
+            <h2>Daily Quests</h2>
+            <label>Quests Completed: <input type="number" id="quests-completed" value="0"></label><br>
+            <label>Stat Points Rewarded: <input type="number" id="stat-points-rewarded" value="0"></label>
+        </section>
+
+        <button onclick="saveData()">Save</button>
+        <button onclick="loadData()">Load</button>
+    </div>
+
+    <script>
+        function updateStats() {
+            const level = parseInt(document.getElementById('player-level').value);
+            const health = parseInt(document.getElementById('attr-health').value);
+            const intelligence = parseInt(document.getElementById('attr-intelligence').value);
+
+            // Calculate HP and MP based on level and attributes
+            const hp = (level * 100) + (health * 50);
+            const mp = (level * 5) + intelligence;
+
+            document.getElementById('stat-hp').innerText = hp;
+            document.getElementById('stat-mp').innerText = mp;
+
+            // More calculations for sub stats can be added here
+        }
+
+        function saveData() {
+            const data = {
+                playerName: document.getElementById('player-name').value,
+                playerClass: document.getElementById('player-class').value,
+                playerLevel: document.getElementById('player-level').value,
+                attributes: {
+                    health: document.getElementById('attr-health').value,
+                    strength: document.getElementById('attr-strength').value,
+                    speed: document.getElementById('attr-speed').value,
+                    intelligence: document.getElementById('attr-intelligence').value
+                },
+                subStats: {
+                    critDamage: document.getElementById('sub-crit-damage').value,
+                    critRate: document.getElementById('sub-crit-rate').value,
+                    damageReduction: document.getElementById('sub-damage-reduction').value,
+                    healReceived: document.getElementById('sub-heal-received').value
+                },
+                equipment: {
+                    weapon: document.getElementById('equip-weapon').value,
+                    armor: document.getElementById('equip-armor').value,
+                    accessories: document.getElementById('equip-accessories').value
+                },
+                skills: {
+                    name: document.getElementById('skill-name').value,
+                    level: document.getElementById('skill-level').value,
+                    description: document.getElementById('skill-description').value
+                },
+                inventory: {
+                    itemName: document.getElementById('item-name').value,
+                    quantity: document.getElementById('item-quantity').value,
+                    description: document.getElementById('item-description').value
+                },
+                dailyQuests: {
+                    questsCompleted: document.getElementById('quests-completed').value,
+                    statPointsRewarded: document.getElementById('stat-points-rewarded').value
+                }
+            };
+
+            localStorage.setItem('statSheetData', JSON.stringify(data));
+            alert('Data saved!');
+        }
+
+        function loadData() {
+            const data = JSON.parse(localStorage.getItem('statSheetData'));
+
+            if (data) {
+                document.getElementById('player-name').value = data.playerName;
+                document.getElementById('player-class').value = data.playerClass;
+                document.getElementById('player-level').value = data.playerLevel;
+                
+                document.getElementById('attr-health').value = data.attributes.health;
+                document.getElementById('attr-strength').value = data.attributes.strength;
+                document.getElementById('attr-speed').value = data.attributes.speed;
+                document.getElementById('attr-intelligence').value = data.attributes.intelligence;
+                
+                document.getElementById('sub-crit-damage').value = data.subStats.critDamage;
+                document.getElementById('sub-crit-rate').value = data.subStats.critRate;
+                document.getElementById('sub-damage-reduction').value = data.subStats.damageReduction;
+                document.getElementBy
